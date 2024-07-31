@@ -1,0 +1,14 @@
+﻿@page
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="text-align: center; margin-top: 50px;">
+    <a asp-controller="Chat" asp-action="JoinAsAdmin" style="font-size: 20px; display: inline-block; margin-bottom: 20px;">Admin</a>
+
+    <form method="post" asp-controller="Chat" asp-action="JoinAsGuest">
+        <input type="text" name="guestName" placeholder="Enter your name" style="font-size: 20px; margin-bottom: 20px;" />
+        <br />
+        <button type="submit" style="font-size: 20px;">Join as Guest</button>
+    </form>
+</div>

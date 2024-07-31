@@ -1,0 +1,22 @@
+﻿@page
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+	<div class="mt-5">
+		<input type="hidden" id="userName" value="@ViewBag.GuestName" />
+		<label for="message">Message: </label>
+		<input type="text" id="message" />
+		<input type="button" id="send" value="Send" />
+	</div>
+
+	<div id="messages">
+		<ul id="messagesList"></ul>
+	</div>
+</div>
+
+<script src="~/lib/signalr.js"></script>
+
+<script src="~/js/guest.js"></script>
+

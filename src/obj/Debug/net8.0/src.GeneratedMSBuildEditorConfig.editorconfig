@@ -18,6 +18,22 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = F:\Developer\interview\Companies Tasks\easacc\live-chat-asp.net-mvc\src\src
 build_property._RazorSourceGeneratorDebug = 
 
-[F:/Developer/interview/Companies Tasks/easacc/live-chat-asp.net-mvc/src/src/Views/_ViewStart.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+[F:/Developer/interview/Companies Tasks/easacc/live-chat-asp.net-mvc/src/src/Views/Chat/Admin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hhdFxBZG1pbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Developer/interview/Companies Tasks/easacc/live-chat-asp.net-mvc/src/src/Views/Chat/Guest.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hhdFxHdWVzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Developer/interview/Companies Tasks/easacc/live-chat-asp.net-mvc/src/src/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Developer/interview/Companies Tasks/easacc/live-chat-asp.net-mvc/src/src/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Developer/interview/Companies Tasks/easacc/live-chat-asp.net-mvc/src/src/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

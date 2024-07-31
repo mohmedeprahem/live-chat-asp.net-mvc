@@ -1,0 +1,24 @@
+﻿@page
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Active Users</h3>
+            <ul id="userList" class="list-group"></ul>
+        </div>
+        <div class="col-md-8">
+            <h3>Chat with User</h3>
+            <div id="chatWindows">
+                <!-- Individual chat windows will be appended here dynamically -->
+            </div>
+            <input type="text" id="messageInput" placeholder="Type a message" />
+            <button id="sendMessage">Send</button>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/signalr.js"></script>
+<script src="~/js/admin.js"></script>
