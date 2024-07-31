@@ -9,9 +9,21 @@ namespace src.Hubs
 
         public static string _adminConnectionId = "";
 
-        public async Task SendMessage(string message)
+        public async Task SendMessageToAdmin(string message)
         {
-            await Clients.All.SendAsync("ReceiveMessage", message);
+            if (!string.IsNullOrEmpty(_adminConnectionId))
+            {
+                await Clients
+                    .Client(_adminConnectionId)
+                    .SendAsync("ReceiveMessageFromUser", Context.ConnectionId, message);
+            }
+        }
+
+        public async Task sendMessageToUser(string receiverConnectionId, string message)
+        {
+            await Clients
+                .Client(receiverConnectionId)
+                .SendAsync("ReceiveMessageFromAdmin", message);
         }
 
         public async Task JoinAsGuest(string name)
@@ -33,9 +45,8 @@ namespace src.Hubs
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            var guestInfo = _activeGuests.FirstOrDefault(
-                x => x.ConnectionId == Context.ConnectionId
-            );
+            await base.OnDisconnectedAsync(exception);
+            var guestInfo = _activeGuests.First(x => x.ConnectionId == Context.ConnectionId);
             if (guestInfo != null)
             {
                 _activeGuests.Remove(guestInfo);
@@ -46,7 +57,6 @@ namespace src.Hubs
                         .SendAsync("UserLeft", guestInfo.ConnectionId);
                 }
             }
-            await base.OnDisconnectedAsync(exception);
         }
     }
 }

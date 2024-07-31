@@ -5,20 +5,12 @@ let connection = new signalR.HubConnectionBuilder()
     .build();
 
 connection.on("ReceiveMessageFromUser", function (userConnectionId, message) {
-    
+    displayMessage(userConnectionId, message);
 });
 
 connection.on("NewUserJoin", function (userConnectionId, userName) {
-    const li = document.createElement("li");
-    li.classList.add("list-group-item");
-    li.dataset.userConnectionId = userConnectionId;
-    li.textContent = userName;
-    li.addEventListener("click", function () {
-        document.querySelectorAll('#userList .list-group-item').forEach(item => item.classList.remove('active'));
-        this.classList.add('active');
-        showChatWindow(userConnectionId);
-    });
-    userList.appendChild(li);
+    console.log(userConnectionId, userName, "new user join");
+    updateUserList({ connectionId: userConnectionId, userName });
     createChatWindow(userConnectionId);
 })
 
@@ -38,18 +30,42 @@ connection.start().then(() => {
     return console.error(err.toString());
 });
 
+
+document.getElementById("sendMessage").addEventListener("click", function (event) {
+    const message = document.getElementById("messageInput").value;
+    const userConnectionId = document.getElementById("userList").querySelector(".active").dataset.userConnectionId;
+
+    connection.invoke("sendMessageToUser", userConnectionId, message).catch(function (err) {
+        return console.error(err.toString());
+    });
+    displayMessage(userConnectionId, message, true);
+    document.getElementById("messageInput").value = '';
+    event.preventDefault();
+})
+
+function displayMessage(userConnectionId, message, isAdmin = false) {
+    let chatWindow = document.getElementById(`chatWindow-${userConnectionId}`);
+
+    const messageElement = document.createElement("li");
+    messageElement.textContent = ` ${isAdmin ? "" : "User:"} ${message}`;
+    chatWindow.querySelector('ul').appendChild(messageElement);
+}
+function updateUserList(user) {
+    const li = document.createElement("li");
+    li.classList.add("list-group-item");
+    li.dataset.userConnectionId = user.connectionId;
+    li.textContent = user.userName;
+    li.addEventListener("click", function () {
+        document.querySelectorAll('#userList .list-group-item').forEach(item => item.classList.remove('active'));
+        this.classList.add('active');
+        showChatWindow(user.connectionId);
+    });
+    userList.appendChild(li);
+}
+
 function createUserList(users) {
     users.forEach(user => {
-        const li = document.createElement("li");
-        li.classList.add("list-group-item");
-        li.dataset.userId = user.connectionId;
-        li.textContent = user.userName;
-        li.addEventListener("click", function () {
-            document.querySelectorAll('#userList .list-group-item').forEach(item => item.classList.remove('active'));
-            this.classList.add('active');
-            showChatWindow(user.connectionId);
-        });
-        userList.appendChild(li);
+        updateUserList(user);
     });
 }
 function showChatWindow(userConnectionId) {
@@ -64,7 +80,7 @@ function createChatWindow(userConnectionId) {
     const chatWindowContainer = document.createElement("div");
     chatWindowContainer.id = `chatWindow-${userConnectionId}`;
     chatWindowContainer.classList.add('chat-window');
-
+    chatWindowContainer.style.display = 'none';
     const messagesList = document.createElement("ul");
     messagesList.classList.add('messages-list');
     chatWindowContainer.appendChild(messagesList);

@@ -4,10 +4,8 @@ let connection = new signalR.HubConnectionBuilder()
     .withUrl("/chatHub")
     .build();
 
-connection.on("ReceiveMessage", function (message) {
-    var li = document.createElement("li");
-    li.textContent = message;
-    document.getElementById("messagesList").appendChild(li)
+connection.on("ReceiveMessageFromAdmin", function (message) {
+    displayMessage(message, true);
 });
 connection.start().then(function () {
     connection.invoke("joinAsGuest", document.getElementById("userName").value)
@@ -17,10 +15,17 @@ connection.start().then(function () {
 
 
 document.getElementById("send").addEventListener("click", function (event) {
-    var user = document.getElementById("userName").value;
     var message = document.getElementById("message").value;
-    connection.invoke("SendMessage", message).catch(function (err) {
+    connection.invoke("sendMessageToAdmin", message).catch(function (err) {
         return console.error(err.toString());
     });
+    displayMessage(message);
+    document.getElementById("message").value = '';
     event.preventDefault();
 })
+
+function displayMessage(message, isAdmin = false) {
+    var li = document.createElement("li");
+    li.textContent = `${isAdmin ? "Admin: " : ""}: ${message}`;
+    document.getElementById("messagesList").appendChild(li)
+}
