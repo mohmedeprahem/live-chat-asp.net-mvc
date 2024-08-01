@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using System.Collections.Concurrent;
+using Microsoft.AspNetCore.SignalR;
 using src.Models;
 
 namespace src.Hubs
@@ -9,9 +10,16 @@ namespace src.Hubs
 
         public static string _adminConnectionId = "";
 
+        private static readonly ConcurrentDictionary<string, List<string>> _audioChunks =
+            new ConcurrentDictionary<string, List<string>>();
+
         public async Task SendMessageToAdmin(string message)
         {
-            if (!string.IsNullOrEmpty(_adminConnectionId))
+            if (
+                !string.IsNullOrEmpty(_adminConnectionId)
+                && message != null
+                && message.Length < 200
+            )
             {
                 await Clients
                     .Client(_adminConnectionId)

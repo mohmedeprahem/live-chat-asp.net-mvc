@@ -18,6 +18,12 @@
             <button id="sendMessage">Send</button>
             <input name="file" id="fileInput" type="file" multiple>
             <button id="sendFile">Send File</button>
+            <div class="recording-controls">
+                <button id="startRecording" class="btn btn-danger">Start Recording</button>
+                <button id="stopRecording" class="btn btn-secondary">Stop Recording</button>
+                <button id="sendRecording" class="btn btn-primary" style="display: none;">Send Recording</button>
+                <audio id="audioPlayer" controls class="mt-3"></audio>
+            </div>
         </div>
     </div>
 </div>

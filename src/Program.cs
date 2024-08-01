@@ -32,6 +32,15 @@ app.UseStaticFiles(
         RequestPath = "/Documents"
     }
 );
+app.UseStaticFiles(
+    new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Audio")
+        ),
+        RequestPath = "/Audio"
+    }
+);
 
 app.UseRouting();
 

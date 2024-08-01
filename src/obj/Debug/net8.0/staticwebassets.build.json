@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "oMVRLfanLi+MMRl6uM83+KSI5pICZttq3YXbadIwBcQ=",
+  "Hash": "ioPCCnWwL0HvEwrLngbfwKZ35EewZH4ClQYm7Mh9glQ=",
   "Source": "src",
   "BasePath": "_content/src",
   "Mode": "Default",
@@ -16,6 +16,25 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "F:\\Developer\\interview\\Companies Tasks\\easacc\\live-chat-asp.net-mvc\\src\\src\\wwwroot\\css\\chat.css",
+      "SourceId": "src",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\Developer\\interview\\Companies Tasks\\easacc\\live-chat-asp.net-mvc\\src\\src\\wwwroot\\",
+      "BasePath": "_content/src",
+      "RelativePath": "css/chat.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\chat.css"
+    },
     {
       "Identity": "F:\\Developer\\interview\\Companies Tasks\\easacc\\live-chat-asp.net-mvc\\src\\src\\wwwroot\\favicon.ico",
       "SourceId": "src",

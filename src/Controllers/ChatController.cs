@@ -79,5 +79,52 @@ namespace src.Controllers
             }
             return Ok(new { fileUrl });
         }
+
+        [HttpPost("/Chat/Upload-Audio")]
+        public async Task<IActionResult> UploadAudio(
+            IFormFile file,
+            bool toAdmin,
+            string userConnectionId = ""
+        )
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded.");
+
+            var extension = Path.GetExtension(file.FileName);
+            string filename = DateTime.Now.ToString("yyyyMMddHHmmss") + extension;
+
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Audio");
+
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+            filePath = Path.Combine(filePath, filename);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var request = HttpContext.Request;
+            var baseUrl = $"{request.Scheme}://{request.Host}";
+            var fileUrl = $"{baseUrl}/Audio/{filename}";
+
+            if (toAdmin)
+            {
+                await _hubContext
+                    .Clients
+                    .Client(ChatHub._adminConnectionId)
+                    .SendAsync("ReceiveAudioFromUser", userConnectionId, new { Url = fileUrl });
+            }
+            else
+            {
+                await _hubContext
+                    .Clients
+                    .Client(userConnectionId)
+                    .SendAsync("ReceiveAudioFromAdmin", new { Url = fileUrl });
+            }
+            return Ok(new { fileUrl });
+        }
     }
 }

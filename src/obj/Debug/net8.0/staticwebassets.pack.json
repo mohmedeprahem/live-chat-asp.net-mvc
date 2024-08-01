@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "F:\\Developer\\interview\\Companies Tasks\\easacc\\live-chat-asp.net-mvc\\src\\src\\wwwroot\\css\\chat.css",
+      "PackagePath": "staticwebassets\\css\\chat.css"
+    },
+    {
       "Id": "F:\\Developer\\interview\\Companies Tasks\\easacc\\live-chat-asp.net-mvc\\src\\src\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },

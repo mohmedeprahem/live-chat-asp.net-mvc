@@ -1,4 +1,7 @@
 ﻿"use strict";
+let mediaRecorder = null;
+let audioChunks = [];
+let audioBlob = null;
 
 let connection = new signalR.HubConnectionBuilder()
     .withUrl("/chatHub")
@@ -52,6 +55,87 @@ connection.on("ReceiveFileFromUser", function (userConnectionId, file) {
 
 })
 
+connection.on("ReceiveAudioFromUser", function (userConnectionId, file) {
+    console.log(file, userConnectionId);
+    displayAudio(file.url, userConnectionId, false);
+})
+
+document.getElementById("startRecording").addEventListener("click", function (event) {
+    audioChunks = [];
+    setupAudio();
+});
+
+document.getElementById("stopRecording").addEventListener("click", function (event) {
+    if (mediaRecorder) {
+        mediaRecorder.stop();
+        document.getElementById("sendRecording").style.display = 'inline-block';
+    } else {
+        console.error("MediaRecorder is not initialized.");
+    }
+});
+
+document.getElementById("sendRecording").addEventListener("click", function (event) {
+    if (audioChunks.length > 0) {
+        const formData = new FormData();
+        const receiverConnectionId = document.getElementById("userList").querySelector(".active").dataset.userConnectionId;
+        formData.append('file', audioBlob, 'recording.ogg');
+        formData.append('toAdmin', false);
+        formData.append('userConnectionId', receiverConnectionId);
+
+        fetch('/Chat/Upload-Audio', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Upload successful:', result);
+                document.getElementById("sendRecording").style.display = 'none';
+                displayAudio(result.fileUrl, receiverConnectionId, true);
+            })
+            .catch(error => {
+                console.error('Upload error:', error);
+            });
+    } else {
+        console.error("No audio recording available to send.");
+    }
+});
+function displayAudio(url, userConnectionId, isAdmin = false) {
+    let chatWindow = document.getElementById(`chatWindow-${userConnectionId}`);
+    let messageElement = document.createElement("li");
+    messageElement.textContent = ` ${isAdmin ? "" : "User:"} `;
+    let audioElement = document.createElement("audio");
+    audioElement.src = url;
+    audioElement.controls = true;
+    messageElement.appendChild(audioElement);
+    chatWindow.querySelector('ul').appendChild(messageElement);
+}
+
+
+function setupAudio() {
+    const audioPlayer = document.getElementById("audioPlayer");
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.ondataavailable = function (e) {
+                    audioChunks.push(e.data);
+                }
+                mediaRecorder.onstop = function () {
+
+                    audioBlob = new Blob(audioChunks, { 'type': 'audio/ogg; codecs=opus' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audioPlayer.src = audioUrl;
+                }
+                mediaRecorder.start();
+            })
+            .catch(error => {
+                console.error("Error accessing media devices.", error);
+            });
+    } else {
+        console.error("Media Devices API not supported.");
+    }
+}
 
 document.getElementById("sendMessage").addEventListener("click", function (event) {
     const message = document.getElementById("messageInput").value;
