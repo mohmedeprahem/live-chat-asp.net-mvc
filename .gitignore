@@ -2,6 +2,8 @@
 /dist
 /src/node_modules
 .env
+/src/Uploads/Docs/*
+/src/Uploads/Voice/*
 
 # Logs
 logs

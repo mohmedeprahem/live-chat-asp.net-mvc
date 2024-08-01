@@ -30,6 +30,28 @@ connection.start().then(() => {
     return console.error(err.toString());
 });
 
+connection.on("ReceiveFileFromUser", function (userConnectionId, file) {
+    let chatWindow = document.getElementById(`chatWindow-${userConnectionId}`);
+
+    let li = document.createElement("li");
+    li.textContent = `User: ${file.name}`;
+    chatWindow.querySelector('ul').appendChild(li);
+
+    if (file.name.match(/\.(jpg|jpeg|png|gif)$/)) {
+        let img = document.createElement("img");
+        img.src = file.url;
+        img.width = 100;
+        img.height = 100;
+        chatWindow.querySelector('ul').appendChild(img);
+    }
+
+    let a = document.createElement("a");
+    a.href = file.url;
+    a.download = file.name;
+    chatWindow.querySelector('ul').appendChild(a);
+
+})
+
 
 document.getElementById("sendMessage").addEventListener("click", function (event) {
     const message = document.getElementById("messageInput").value;
@@ -42,6 +64,46 @@ document.getElementById("sendMessage").addEventListener("click", function (event
     document.getElementById("messageInput").value = '';
     event.preventDefault();
 })
+
+document.getElementById("sendFile").addEventListener("click", function (event) {
+    event.preventDefault();
+
+    const activeUserElement = document.getElementById("userList").querySelector(".active");
+    if (!activeUserElement) {
+        console.error("No active user found.");
+        return;
+    }
+
+    const userConnectionId = activeUserElement.dataset.userConnectionId;
+    const fileInput = document.getElementById("fileInput");
+
+    if (!fileInput.files || fileInput.files.length === 0) {
+        console.error("No file selected.");
+        return;
+    }
+
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("userConnectionId", userConnectionId);
+    formData.append("toAdmin", false);
+
+    console.log("Uploading file for user:", userConnectionId);
+
+    fetch("/Chat/uploadFile", {
+        method: "POST",
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("File uploaded successfully:", data);
+            fileInput.value = '';
+            displayMessage(userConnectionId, file.name, true);
+        })
+        .catch(error => {
+            console.error("Error uploading file:", error);
+        });
+});
 
 function displayMessage(userConnectionId, message, isAdmin = false) {
     let chatWindow = document.getElementById(`chatWindow-${userConnectionId}`);
