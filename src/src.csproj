@@ -10,9 +10,4 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="8.0.7" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Uploads\Docs\" />
-    <Folder Include="Uploads\Voice\" />
-  </ItemGroup>
-
 </Project>

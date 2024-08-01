@@ -2,6 +2,12 @@ using Microsoft.Extensions.FileProviders;
 using src.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
+var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads/Docs");
+
+if (!Directory.Exists(filePath))
+{
+    Directory.CreateDirectory(filePath);
+}
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
